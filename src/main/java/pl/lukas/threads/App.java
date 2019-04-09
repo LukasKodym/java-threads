@@ -16,7 +16,5 @@ public class App {
         Thread anotherThread = new Thread(runnable, "My-Runnable-1");
 
         anotherThread.start();
-
-
     }
 }
