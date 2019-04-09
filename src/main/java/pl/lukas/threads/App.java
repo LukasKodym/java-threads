@@ -2,6 +2,7 @@ package pl.lukas.threads;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class App {
@@ -10,7 +11,7 @@ public class App {
 
         System.out.println("Główny wątek aplikacji " + Thread.currentThread().getName());
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
 
         Runnable worker1 = () -> {
             try {
@@ -41,9 +42,7 @@ public class App {
             }
         };
 
-        executor.submit(worker1);
-        executor.submit(worker2);
-        executor.submit(worker3);
-        executor.shutdown();
+        executorService.schedule(worker1,5,TimeUnit.SECONDS);
+        executorService.shutdown();
     }
 }
