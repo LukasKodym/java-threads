@@ -10,7 +10,13 @@ public class App {
 
         thread.start();
 
-        Runnable runnable = new MyRunnable();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Wykonywany wątek (runnable) " + Thread.currentThread().getName());
+
+            }
+        };
 
         Thread anotherThread = new Thread(runnable, "My-Runnable-1");
 
