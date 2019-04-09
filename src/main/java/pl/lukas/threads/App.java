@@ -1,5 +1,7 @@
 package pl.lukas.threads;
 
+import java.util.concurrent.TimeUnit;
+
 public class App {
 
     public static void main(String[] args) {
@@ -14,8 +16,8 @@ public class App {
                         + Thread.currentThread().getName());
                 for (int i = 0; i <= 10; i++) {
                     System.out.println(i);
-
-                    Thread.sleep(1000);
+                    //Thread.sleep(1000); // the same as below
+                    TimeUnit.SECONDS.sleep(1);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
