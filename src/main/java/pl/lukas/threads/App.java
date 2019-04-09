@@ -10,10 +10,8 @@ public class App {
 
         thread.start();
 
-        Runnable runnable = () -> System.out.println("Wykonywany wątek (runnable) "
-                + Thread.currentThread().getName());
-
-        Thread anotherThread = new Thread(runnable, "My-Runnable-1");
+        Thread anotherThread = new Thread(() -> System.out.println("Wykonywany wątek (runnable) "
+                + Thread.currentThread().getName()), "My-Runnable-1");
 
         anotherThread.start();
     }
