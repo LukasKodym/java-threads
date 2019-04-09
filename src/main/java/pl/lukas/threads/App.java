@@ -42,7 +42,7 @@ public class App {
             }
         };
 
-        executorService.schedule(worker1,5,TimeUnit.SECONDS);
-        executorService.shutdown();
+        executorService.scheduleAtFixedRate(worker3,2,6,TimeUnit.SECONDS);
+//        executorService.shutdown();
     }
 }
