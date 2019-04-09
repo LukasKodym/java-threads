@@ -10,32 +10,40 @@ public class App {
 
         System.out.println("Główny wątek aplikacji " + Thread.currentThread().getName());
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
-        Runnable countdown = () -> {
+        Runnable worker1 = () -> {
             try {
-                System.out.println("Wykonywany wątek (countdown) "
-                        + Thread.currentThread().getName());
-                for (int i = 1; i <= 10; i++) {
-                    System.out.println(i);
-                    //Thread.sleep(1000); // the same as below
-                    TimeUnit.MILLISECONDS.sleep( 100);
-                }
+                System.out.println("Robotnik 1 - Aktualny wątek " + Thread.currentThread().getName());
+                System.out.println("Ładuje butlę z tlenem");
+                TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         };
 
-        Runnable blastOff = () -> {
-            System.out.println("Wykonywany wątek (blastOff) "
-                    + Thread.currentThread().getName());
-            System.out.println("Blast off");
+        Runnable worker2 = () -> {
+            try {
+                System.out.println("Robotnik 2 - Aktualny wątek " + Thread.currentThread().getName());
+                System.out.println("Ładuje zapas pożywienia");
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        Runnable worker3 = () -> {
+            try {
+                System.out.println("Robotnik 3 - Aktualny wątek " + Thread.currentThread().getName());
+                System.out.println("Ładuje paliwo");
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         };
 
-        executor.submit(countdown);
-        executor.submit(blastOff);
-
+        executor.submit(worker1);
+        executor.submit(worker2);
+        executor.submit(worker3);
         executor.shutdown();
-//        executor.shutdownNow();
     }
 }
