@@ -1,11 +1,16 @@
 package pl.lukas.threads;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class App {
 
     public static void main(String[] args) throws InterruptedException {
 
+        System.out.println("Główny wątek aplikacji " + Thread.currentThread().getName());
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
 
         Runnable countdown = () -> {
             try {
@@ -27,11 +32,10 @@ public class App {
             System.out.println("Blast off");
         };
 
-        Thread countdownThread = new Thread(countdown, "Countdowns");
-        Thread blastThread = new Thread(blastOff, "BlastOff");
-        countdownThread.start();
-        countdownThread.join(400);
-        System.out.println("Główny wątek aplikacji " + Thread.currentThread().getName());
-        blastThread.start();
+        executor.submit(countdown);
+        executor.submit(blastOff);
+
+        executor.shutdown();
+//        executor.shutdownNow();
     }
 }
