@@ -9,21 +9,31 @@ public class App {
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
 
-        CompletableFuture<Long> userIdFuture = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Long> cfuture1 = CompletableFuture.supplyAsync(() -> {
             try {
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return getUserId();
+            return 32L;
         });
 
-        CompletableFuture<Void> future = userIdFuture
-                .thenCompose(userId ->
-                        CompletableFuture.supplyAsync(() -> getDiscount(userId)))
-                .thenAccept(discount -> System.out.println(discount));
+        CompletableFuture<Long> cfuture2 = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return 2L;
+        });
 
-        future.get();
+        CompletableFuture<Long> longCompletableFuture =
+                cfuture1.thenCombine(cfuture2, (result1, result2) -> result1 * result2);
+
+        Long aLong = longCompletableFuture.get();
+
+        System.out.println(aLong);
+
         executor.shutdown();
     }
 
