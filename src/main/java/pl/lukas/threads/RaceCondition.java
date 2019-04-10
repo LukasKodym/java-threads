@@ -3,11 +3,12 @@ package pl.lukas.threads;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RaceCondition {
 
     public static void main(String[] args) throws InterruptedException {
-        ExecutorService executor= Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(10);
 
         Counter counter = new Counter();
 
@@ -20,17 +21,15 @@ public class RaceCondition {
     }
 }
 
-class Counter{
+class Counter {
 
-    int count = 0;
+    private AtomicInteger count = new AtomicInteger(0);
 
-    public void increase(){
-        synchronized (this){
-            count = count + 1;
-        }
-     }
+    public void increase() {
+        count.getAndIncrement();
+    }
 
     public int getCount() {
-        return count;
+        return count.get();
     }
 }
