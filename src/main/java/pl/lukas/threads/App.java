@@ -13,7 +13,7 @@ public class App {
                 executor
         );
 
-        CompletableFuture<Integer> voidCompletableFuture = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
@@ -26,10 +26,11 @@ public class App {
         }).thenApply(bar -> {
             System.out.println("+1 " + Thread.currentThread().getName());
             return bar + 1;
+        }).thenAccept(bar -> {
+            System.out.println("sout " + Thread.currentThread().getName());
+            System.out.println(bar);
         });
 
-        System.out.println(voidCompletableFuture.get());
-
-        executor.shutdownNow();
+        executor.shutdown();
     }
 }
