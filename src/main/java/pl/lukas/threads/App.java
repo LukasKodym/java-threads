@@ -1,13 +1,10 @@
 package pl.lukas.threads;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
@@ -16,7 +13,11 @@ public class App {
             return 42;
         };
 
-        executor.submit(answerToEverything);
+        Future<Integer> result = executor.submit(answerToEverything);
+
+        Integer r = result.get();
+
+        System.out.println(r);
 
         executor.shutdown();
     }
