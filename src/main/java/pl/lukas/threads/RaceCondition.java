@@ -24,7 +24,7 @@ class Counter{
 
     int count = 0;
 
-    public void increase(){
+    synchronized public void increase(){
         count = count + 1;
     }
 
