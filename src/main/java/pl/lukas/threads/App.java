@@ -8,7 +8,7 @@ public class App {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
 
         Callable<Integer> answerToEverything = () -> {
             TimeUnit.SECONDS.sleep(10);
@@ -32,8 +32,15 @@ public class App {
 
         Future<Integer> result = executor.submit(answerToEverything);
 
+        List<Future<Integer>> futures = executor.invokeAll(callableList);
 
-        executor.invokeAll()
+        Integer bar = executor.invokeAny(callableList);
+
+        System.out.println(bar);
+
+//        for (Future<Integer> f : futures){
+//            System.out.println(f.get());
+//        }
 
         executor.shutdown();
     }
