@@ -15,7 +15,7 @@ public class App {
                 () -> System.out.println("Wątek: " + Thread.currentThread().getName())
         );
 
-        CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
             try {
                 TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
@@ -23,6 +23,8 @@ public class App {
             }
             return 42;
         });
+
+        System.out.println(result.get());
 
         executor.shutdown();
     }
