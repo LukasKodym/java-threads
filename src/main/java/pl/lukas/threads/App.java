@@ -15,29 +15,14 @@ public class App {
                 () -> System.out.println("Wątek: " + Thread.currentThread().getName())
         );
 
-        CompletableFuture.supplyAsync(new Supplier<Integer>(
-        ) {
-            @Override
-            public Integer get() {
-                return null;
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            return 42;
         });
-
-//        Callable<Integer> answerToEverything = () -> {
-//            TimeUnit.SECONDS.sleep(10);
-//            return 42;
-//        };
-//
-//        Callable<Integer> anotherAnswerToEverything = () -> {
-//            TimeUnit.SECONDS.sleep(13);
-//            return 43;
-//        };
-//
-//        Callable<Integer> finalToEverything = () -> {
-//            TimeUnit.SECONDS.sleep(5);
-//            return 44;
-//        };
-
 
         executor.shutdown();
     }
