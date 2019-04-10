@@ -8,40 +8,34 @@ public class App {
 
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
+        final boolean err = true;
 
-        CompletableFuture<Long> cfuture1 = CompletableFuture.supplyAsync(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return 32L;
-        });
+        CompletableFuture.runAsync(
+                () -> System.out.println("Wątek: " + Thread.currentThread().getName()),
+                executor
+        );
 
-        CompletableFuture<Long> cfuture2 = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return 2L;
+            if(err){
+                throw new IllegalArgumentException("Wrong argument");
+            }
+            return 42;
+        }, executor).thenApply(bar -> {
+            System.out.println("*2 " + Thread.currentThread().getName());
+            return bar * 2;
+        }).thenApply(bar -> {
+            System.out.println("+1 " + Thread.currentThread().getName());
+            return bar + 1;
+        }).thenAccept(bar -> {
+            System.out.println("sout " + Thread.currentThread().getName());
+            System.out.println(bar);
         });
 
-        CompletableFuture<Long> longCompletableFuture =
-                cfuture1.thenCombine(cfuture2, (result1, result2) -> result1 * result2);
-
-        Long aLong = longCompletableFuture.get();
-
-        System.out.println(aLong);
-
         executor.shutdown();
-    }
-
-    public static Long getUserId() {
-        return 324L;
-    }
-
-    public static Double getDiscount(Long userId) {
-        return 0.15;
     }
 }
