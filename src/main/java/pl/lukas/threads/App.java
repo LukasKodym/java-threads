@@ -19,7 +19,7 @@ public class App {
         CompletableFuture<Integer> result = CompletableFuture.supplyAsync(
                 () -> {
                     try {
-                        TimeUnit.SECONDS.sleep(10);
+                        TimeUnit.SECONDS.sleep(5);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -27,7 +27,9 @@ public class App {
                 },
                 executor);
 
-        System.out.println(result.get());
+        Integer bar = result.get();
+
+        System.out.println((bar * 2) + 1);
 
         executor.shutdown();
     }
