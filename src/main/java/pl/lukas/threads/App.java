@@ -8,29 +8,30 @@ public class App {
 
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        CompletableFuture.runAsync(
-                () -> System.out.println("Wątek: " + Thread.currentThread().getName()),
-                executor
-        );
 
-        CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Long> userIdFuture = CompletableFuture.supplyAsync(() -> {
             try {
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return 42;
-        }, executor).thenApply(bar -> {
-            System.out.println("*2 " + Thread.currentThread().getName());
-            return bar * 2;
-        }).thenApply(bar -> {
-            System.out.println("+1 " + Thread.currentThread().getName());
-            return bar + 1;
-        }).thenAccept(bar -> {
-            System.out.println("sout " + Thread.currentThread().getName());
-            System.out.println(bar);
+            return getUserId();
         });
 
+        CompletableFuture<Void> future = userIdFuture
+                .thenCompose(userId ->
+                        CompletableFuture.supplyAsync(() -> getDiscount(userId)))
+                .thenAccept(discount -> System.out.println(discount));
+
+        future.get();
         executor.shutdown();
+    }
+
+    public static Long getUserId() {
+        return 324L;
+    }
+
+    public static Double getDiscount(Long userId) {
+        return 0.15;
     }
 }
