@@ -25,11 +25,10 @@ public class App {
                     }
                     return 42;
                 },
-                executor);
+                executor).thenApply(bar -> bar * 2).thenApply(bar -> bar + 1);
 
-        Integer bar = result.get();
 
-        System.out.println((bar * 2) + 1);
+        System.out.println(result.get());
 
         executor.shutdown();
     }
