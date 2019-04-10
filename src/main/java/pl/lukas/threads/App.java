@@ -3,6 +3,7 @@ package pl.lukas.threads;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class App {
@@ -24,8 +25,17 @@ public class App {
                         e.printStackTrace();
                     }
                     return 42;
-                },
-                executor).thenApply(bar -> bar * 2).thenApply(bar -> bar + 1);
+                }, executor)
+                .thenApply(
+                        bar -> {
+                            System.out.println("*2 " + Thread.currentThread().getName());
+                            return bar * 2;
+                        })
+                .thenApply(
+                        bar -> {
+                            System.out.println("+1 " + Thread.currentThread().getName());
+                            return bar + 1;
+                        });
 
 
         System.out.println(result.get());
