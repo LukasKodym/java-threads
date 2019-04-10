@@ -1,10 +1,7 @@
 package pl.lukas.threads;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public class App {
 
@@ -17,29 +14,27 @@ public class App {
                 executor
         );
 
-        CompletableFuture<Integer> result = CompletableFuture.supplyAsync(
-                () -> {
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return 42;
-                }, executor)
-                .thenApply(
-                        bar -> {
-                            System.out.println("*2 " + Thread.currentThread().getName());
-                            return bar * 2;
-                        })
-                .thenApply(
-                        bar -> {
-                            System.out.println("+1 " + Thread.currentThread().getName());
-                            return bar + 1;
-                        });
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return 42;
+        }, executor)
+                .thenApply(bar -> {
+                    System.out.println("*2 " + Thread.currentThread().getName());
+                    return bar * 2;
+                })
+                .thenApply(bar -> {
+                    System.out.println("+1 " + Thread.currentThread().getName());
+                    return bar + 1;
+                })
+                .thenAccept(bar -> {
+                    System.out.println("sout " + Thread.currentThread().getName());
+                    System.out.println(bar);
+                });
 
-
-        System.out.println(result.get());
-
-        executor.shutdown();
+        executor.shutdownNow();
     }
 }
