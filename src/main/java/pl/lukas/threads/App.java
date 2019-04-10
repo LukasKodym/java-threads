@@ -15,6 +15,11 @@ public class App {
 
         Future<Integer> result = executor.submit(answerToEverything);
 
+        while (!result.isDone()) {
+            System.out.println("Brak wyniku");
+            TimeUnit.SECONDS.sleep(2);
+        }
+
         Integer r = result.get();
 
         System.out.println(r);
