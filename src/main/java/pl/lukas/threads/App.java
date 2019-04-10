@@ -1,5 +1,7 @@
 package pl.lukas.threads;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class App {
@@ -13,21 +15,25 @@ public class App {
             return 42;
         };
 
+        Callable<Integer> anotherAnswerToEverything = () -> {
+            TimeUnit.SECONDS.sleep(13);
+            return 43;
+        };
+
+        Callable<Integer> finalToEverything = () -> {
+            TimeUnit.SECONDS.sleep(5);
+            return 44;
+        };
+
+        List<Callable<Integer>> callableList = Arrays.asList(
+                answerToEverything,
+                anotherAnswerToEverything,
+                finalToEverything);
+
         Future<Integer> result = executor.submit(answerToEverything);
 
-//        while (!result.isDone()) {
-//            System.out.println("Brak wyniku");
-//            TimeUnit.SECONDS.sleep(2);
-//        }
 
-        Integer r = null;
-        try {
-            r = result.get(4, TimeUnit.SECONDS);
-            System.out.println(r);
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
-
+        executor.invokeAll()
 
         executor.shutdown();
     }
